@@ -633,7 +633,7 @@ class User: JsonWrite {
     ただ、しばしば「SwiftのprotocolはJavaのinterfaceに似ている」と
     言われることがある。たしかに次のようなJSONに変換できるような
     protocolである``JsonWrite''を考えると、今``User''が
-    ``JsonWrite''を実装する（implement）、または適合する（confirm）ことを
+    ``JsonWrite''を実装する（implement）、または適合する（conform）ことを
     JavaとSwiftでそれぞれ同じように書ける。
     これだけだと確かに似ているが、ただそれだけではない。
   \end{notes}
@@ -1131,7 +1131,7 @@ class App5<A: HList, B: HList, C: HList, D, EV: HAppend> {
 \begin{lstlisting}[style=swift]
 extension App5: HAppend where A == EV.Left, B == EV.Right, C == EV.Result {
   typealias Left = HCons<D, A>
-  typealias Right = X.B
+  typealias Right = B
   typealias Result = HCons<D, C>
 }
 \end{lstlisting}
@@ -1164,7 +1164,7 @@ extension App5: HAppend where A == EV.Left, B == EV.Right, C == EV.Result {
 \begin{lstlisting}[style=swift]
 extension App5: HAppend where A == EV.Left, B == EV.Right, C == EV.Result {
   typealias Left = HCons<D, A>
-  typealias Right = X.B
+  typealias Right = B
   typealias Result = HCons<D, C>
 }
 \end{lstlisting}
