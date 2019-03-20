@@ -1,0 +1,153 @@
+\newfontfamily\listingfont{Menlo}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\makeatletter
+\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}
+\@empty\z@\@empty
+\makeatother
+
+\lstdefinelanguage{swift}{
+  morekeywords={
+    func,if,then,else,for,in,while,do,switch,case,default,where,break,continue,fallthrough,return,
+    typealias,struct,class,enum,protocol,var,func,let,get,set,willSet,didSet,inout,init,deinit,extension,
+    subscript,prefix,operator,infix,postfix,precedence,associativity,left,right,none,convenience,dynamic,
+    final,lazy,mutating,nonmutating,optional,override,required,static,unowned,safe,weak,internal,
+    private,public,is,as,self,unsafe,dynamicType,true,false,nil,Type,Protocol,import
+  },
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]"
+}
+
+\lstset{
+  basicstyle=\listingfont\small,
+  frame=single,
+  xleftmargin=2em,
+  xrightmargin=1em,
+  breaklines=true
+}
+
+\lstdefinestyle{swift}{
+  basicstyle=\listingfont\scriptsize,
+  breakatwhitespace=false,
+  language=swift,
+  captionpos=b,
+  commentstyle=\listingfont\scriptsize\color{dkgreen},
+  extendedchars=true,
+  xleftmargin=1em,
+  xrightmargin=0.5em,
+  keepspaces=true,
+  keywordstyle=\listingfont\scriptsize\color{blue},
+  emphstyle=\listingfont\scriptsize\color{cyan},
+  rulecolor=\listingfont\scriptsize\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stringstyle=\listingfont\scriptsize\color{mauve},
+  tabsize=2
+}
+
+\lstdefinestyle{java}{
+  basicstyle=\listingfont\scriptsize,
+  breakatwhitespace=false,
+  language=Java,
+  captionpos=b,
+  commentstyle=\listingfont\scriptsize\color{dkgreen},
+  extendedchars=true,
+  xleftmargin=1em,
+  xrightmargin=0.5em,
+  keepspaces=true,
+  keywordstyle=\listingfont\scriptsize\color{blue},
+  emphstyle=\listingfont\scriptsize\color{cyan},
+  rulecolor=\listingfont\scriptsize\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stringstyle=\listingfont\scriptsize\color{mauve},
+  tabsize=2
+}
+
+\lstdefinestyle{csharp}{
+  numbers=left,
+  language=[Sharp]C
+}
+
+\lstdefinestyle{cil}{
+  numbers=left,
+  language=CIL
+}
+
+\lstdefinestyle{plain}{
+  numbers=left,
+  language=
+}
+
+\lstdefinestyle{sh}{
+  numbers=left,
+  language=sh
+}
+
+\lstdefinestyle{c}{
+  numbers=left,
+  language=C
+}
+
+\lstdefinestyle{python}{
+  numbers=left,
+  language=Python
+}
+
+\lstdefinestyle{asm-x86}{
+  numbers=left
+}
+
+\lstdefinestyle{pseudo-code}{
+  numbers=left,
+  keywords=[6]{for,from,to,endfor,while,endwhile}
+}
+
+\lstdefinestyle{bitcoin-script}{
+  mathescape=true
+}
+
+\lstdefinestyle{scala}{
+  basicstyle=\listingfont\scriptsize,
+  breakatwhitespace=false,
+  language=scala,
+  captionpos=b,
+  commentstyle=\listingfont\scriptsize\color{dkgreen},
+  extendedchars=true,
+  xleftmargin=1em,
+  xrightmargin=1em,
+  keepspaces=true,
+  keywordstyle=\listingfont\scriptsize\color{blue},
+  emphstyle=\listingfont\scriptsize\color{cyan},
+  rulecolor=\listingfont\scriptsize\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stringstyle=\listingfont\scriptsize\color{mauve},
+  tabsize=2
+}
+
+\lstdefinelanguage{scala}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  moreemph={Byte,Short,Int,Long,Float,Double,Char,
+    String,Boolean,Unit,Null,Nothing,Any,AnyRef,
+    Left,Right,Either},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}

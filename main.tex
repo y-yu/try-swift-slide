@@ -1,0 +1,1345 @@
+\usepackage{luatexja}
+\usepackage[hiragino-pron, nfssonly, deluxe, expert]{luatexja-preset}
+\usepackage{pgfpages}
+\usepackage{fontspec}
+\usepackage{epigraph}
+\usepackage{etoolbox}
+\usepackage{tikz}
+\usepackage{framed}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{libertine}
+\usepackage{bxcoloremoji}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{caption}
+\usepackage{xsavebox}
+
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+
+\usetheme{Boadilla}
+\usecolortheme{seahorse}
+% \usefonttheme{serif}
+
+\setbeamercolor{page number in head/foot}{bg=blue!10}
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\insertshortauthor\hspace*{1ex}(\insertshortinstitute)
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+      \insertshortdate
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,center]{page number in head/foot}%
+      \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatletter
+
+\beamertemplatenavigationsymbolsempty
+
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\setbeamersize{description width=1cm}
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{section in toc}[circle]
+\setbeamertemplate{subsection in toc}{%
+  \leavevmode\leftskip=2em
+  {%
+    \usebeamerfont*{itemize item}%
+    \usebeamercolor{subsection number projected}%
+    \color{bg}%
+    \raise1.25pt\hbox{\donotcoloroutermaths$\bullet$}}%
+  \hskip1.5ex\inserttocsubsection\par}
+\setbeamercolor{title}{bg=white}
+\setbeamertemplate{title page}
+{%
+  \vbox{}
+  \vfill
+  \begingroup
+    \centering
+    \hrulefill
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,shadow=false,rounded=true]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%     
+    \end{beamercolorbox}%
+    \hrulefill
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,shadow=false,rounded=true]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,shadow=false,rounded=true]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,shadow=false,rounded=true]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \endgroup
+  \vfill
+}
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}
+
+
+% ============ ここを消すとNote消える ================
+\mode<handout>{%
+  \setbeameroption{show notes on second screen=right}%
+}
+% ============ ここを消すとNote消える ================
+
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+
+\resetcounteronoverlays{lstlisting}
+\definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
+\DeclareCaptionFormat{listing}{{\color{bluegray}\lstlistingname}#2#3}
+\captionsetup[lstlisting]{format=listing, font={footnotesize}}
+
+\setmonofont[Ligatures=TeX]{CMU Typewriter Text}
+
+\newcommand{\xcolon}{：}
+
+\title[Generics in protocol/extension]{%
+  {\bfseries\rmfamily\mcfamily\huge
+    Generics in protocol/extension%
+  }%
+}
+\author[Hikaru Yoshimura]{%
+  Hikaru \textsc{Yoshimura}（吉村 優）
+}
+\date[try! Swift Tokyo, March 21, 2019]{%
+  \href{https://www.tryswift.co/events/2019/tokyo/en/}{try! Swift Tokyo on \oldstylenums{March 21, 2019}} \\
+  {\scriptsize (\href{https://github.com/y-yu/try-swift-slide}{\texttt{y-yu/try-swift-slide@\GITAbrHash}})}%
+}
+\institute[Recruit Markting Partners Co., Ltd.]{%
+  Recruit Markting Partners Co., Ltd.\\
+  \href{mailto:yyu@mental.poker}{yyu@mental.poker}
+}
+
+\input{./lib/quotebox.tex}
+\input{./lib/footnotemark.tex}
+\input{./lib/ballon.tex}
+\input{./lib/listings.tex}
+\input{./lib/stack.tex}
+\input{vc.tex}
+
+\setbeamertemplate{items}[circle]
+
+\newcommand\ballcircle[1]{%
+  {%
+    \usebeamercolor{enumerate item}%
+    \tikzset{beameritem/.style={circle,inner sep=0,minimum size=2ex,text=enumerate item.bg,fill=enumerate item.fg,font=\footnotesize}}%
+    \tikz[baseline=(n.base)]\node(n)[beameritem]{#1};%
+  }
+}
+\newcommand\ballref[1]{%
+  \ballcircle{\ref{#1}}
+}
+
+\newcommand\ce[1]{%
+  \coloremoji{#1}
+}
+
+\newenvironment{notes}
+  {%
+    \begin{xlrbox}{NotesBox}
+    \begin{minipage}{.95\textwidth}
+    \small\rmfamily\mcfamily
+    \begin{itemize}
+    \setlength{\itemindent}{0em}
+  }{%
+    \end{itemize}
+    \end{minipage}
+    \end{xlrbox}
+    \note{\theNotesBox}}
+
+\makeatletter
+\newsavebox\temp@simple@callout@box
+\newcommand{\simplecallout}[3]{%
+  \sbox{\temp@simple@callout@box}{\mbox{#3}}%
+  \begin{center}%
+    \begin{tikzpicture}%
+      \calloutquote[width=1.1\wd\temp@simple@callout@box,position={(#1.5,-0.2)},fill=#2,rounded corners]{
+        #3%
+      }%
+    \end{tikzpicture}%
+  \end{center}
+}
+\makeatother
+  
+\begin{document}
+
+\begin{frame}
+  \vspace{5ex}
+  \centering
+  \maketitle
+  
+  \begin{notes}
+    \item \textcolor{red}{この右側のページはコメントが書いてあります}
+    （最終的には消えます）
+
+    \item スライドが16:9になりました！
+
+    \item 基本的にスライドは英語で、発表は日本語です
+
+    \item 右側に英語の用語の日本語訳も書きます
+
+    \item ちょっと文字が多すぎるかもしれない。
+    ただスライドにないことを喋るのは大変だけど、
+    あることを当日に飛ばすのはまだ容易なので、
+    つくれるだけ作って練習しつつどうにかしようかな
+
+    \item Transcript:
+    このトークでは「どうやったらGenericsをprotocol/extension」で利用できるか？
+    についてHListというデータ構造の結合を例として解説する。
+    まずは問題について詳しく述べて、そしてSwiftのprotocol/extensionについて
+    Javaのインターフェースと比較しながら述べていく。
+    そして実はprotocol/extensionはオーバーロードのような機能があることを
+    利用して問題をなんとか解決する。
+    最後に現在のSwiftでは難しかったところについて述べて
+    参考文献を紹介する。
+  \end{notes}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Table of Contents}
+
+  \tableofcontents
+
+  \begin{notes}
+    \item Transcript:
+    今日の流れ
+  \end{notes}
+\end{frame}
+
+\section{Self-introduction}
+\begin{frame}
+  \frametitle{Self-introduction}
+  
+  \begin{columns}
+    \begin{column}{0.3\textwidth}
+      \begin{center}
+        \begin{figure}
+          \includegraphics[width=0.85\textwidth]{img/face.jpg}
+        \end{figure}
+      \end{center}
+ 
+      \begin{table}[h]
+        \begin{tabular}{ll}
+          Twitter & \href{https://twitter.com/\_yyu\_}{@\_yyu\_} \\
+          Qiita & \href{https://qiita.com/yyu}{yyu} \\
+          GitHub & \href{https://github.com/y-yu}{y-yu} \\
+        \end{tabular}
+      \end{table}
+    \end{column}
+    \begin{column}{0.7\textwidth}
+      \pause
+      \begin{itemize}
+        \item University of Tsukuba (Bachelor of CS)
+        \begin{itemize}
+          \item Programming Logic Group
+        \end{itemize}
+        
+        \item Scala engineer at
+        \href{http://www.recruit-mp.co.jp/}{Recruit Marketing Partners Co., Ltd.}
+
+        \item I'm interested in
+        \begin{itemize}
+          \item Cryptography
+          \item Functional Programming
+          \item Quantum Information
+          \item Typesetting (\LaTeX)
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[Logic] 論理
+      \item[Scala] スカラ
+      \item[Cryptography] 暗号
+      \item[Functional Programming] 関数プログラミング
+      \item[Quantum Information] 量子情報
+      \item[\LaTeX] ラテック・ラテフ（欧米圏ではラテックらしい）
+    \end{description}
+
+    \item もし発表で「量子」と言ったら、それは``quantum''でおねがいしたいです。
+    たとえば「量子コンピュータ」は``quantum computer''とかです
+
+    \item Transcript:
+    筑波大学でプログラム・ロジックグループという研究室に所属し、
+    型システムの研究を行った。そして現在はリクルートマーケティングパートナーズにて
+    Scalaのサーバーサイドエンジニアをしている。
+    業務では関数型プログラミングをしている。
+    また、暗号や量子コンピュータにも興味がある。
+    そしてこのスライドを作るためにも利用した
+    組版ソフト\LaTeX を使って本を作成するといったこともしている。
+  \end{notes}
+\end{frame}
+
+\section{Problem}
+
+\begin{frame}[fragile]
+  \frametitle{Problem}
+
+  \begin{itemize}
+    \item First we are thinking about these data structures: \lstinline|Tuple| and \lstinline|List|
+  \end{itemize}
+  
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{lstlisting}[style=swift]
+struct Tuple<A, B> {
+  let left: A
+  let right: B
+ 
+  init(_ l: A, _ r: B) {
+    this.left = l
+    this.right = r
+  }
+}
+\end{lstlisting}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{lstlisting}[style=swift]
+enum List<A> {
+  indirect case Cons(
+    h: A,
+    t: List<A>
+  )
+  case Nil
+}
+\end{lstlisting}
+    \end{column}
+  \end{columns}
+
+  \pause
+  \begin{itemize}
+    \item<+-> \lstinline|Tuple| represents \emph{exact two} values
+    for each type \lstinline|A| and \lstinline|B|
+
+    \item<+-> And \lstinline|List| represents fixed type \lstinline|A| values
+    whose number is \emph{more than or equal 0}
+  \end{itemize}
+
+  \uncover<+->{
+    \simplecallout{-}{blue!20}{Can we make a List which have some type values?}
+  }
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[data structure] データ造構
+      \item[Tuple] タプル（組）
+      \item[List] リスト
+      \item[type] 型
+      \item[Cons] コンス（専門用語）
+      \item[Nil] ニル（専門用語）
+    \end{description}
+
+    \item Transcript:
+    タプルはちょうど1つづつAとBの型を持つ値を表し、
+    そしてリストは1つの型Aをもつ0個以上の値を表す。
+    ただ、我々は違う型の値が何個でもはいる型をつくれないだろうか？
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Heterogeneous List}
+
+  \begin{itemize}
+    \item We are looking at \lstinline|HList| as follows
+  \end{itemize}
+
+\begin{lstlisting}[style=swift]
+protocol HList {
+  associatedtype Head
+  associatedtype Tail: HList
+}
+\end{lstlisting}
+
+  \pause
+  \begin{itemize}
+    \item<+-> \lstinline|HList| has two \lstinline|associatedtype|: \lstinline|Head| and \lstinline|Tail|
+  \end{itemize}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[HList] Hリスト（Heterogeneous List）
+      \item[type member] 型メンバー
+    \end{description}
+ 
+    \item HeadとTailも専門用語かも？
+
+    \item Transcript:
+    ここで今日は``HList''というデータ構造を紹介する。
+    HListは``Head''と``Tail''という2つの型メンバー（associatedtype）を
+    持つ。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Heterogeneous List}
+
+  \begin{itemize}
+    \item<+-> And there are two structs: \lstinline|HCons| and \lstinline|HNil|
+  \end{itemize}
+
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+\begin{lstlisting}[style=swift]
+public enum Nothing { }    
+struct HNil: HList {
+  typealias Head = Nothing
+  typealias Tail = HNil
+   
+  init() { }
+   
+  static var hNil = HNil()
+}   
+\end{lstlisting}
+    \end{column}
+    \begin{column}{0.55\textwidth}
+\begin{lstlisting}[style=swift]
+struct HCons<H, T: HList>: HList {
+  typealias Head = H
+  typealias Tail = T
+  let head: Head
+  let tail: Tail
+   
+  init(_ h: Head, _ t: Tail) {
+    self.head = h
+    self.tail = t
+  }
+}
+\end{lstlisting}
+    \end{column}
+  \end{columns}
+
+  \uncover<+->{
+    \simplecallout{}{red!30}{Is it the same to \lstinline|List|?}
+  }
+  \uncover<+->{
+    \simplecallout{-}{green!30}{No, it's not just \lstinline|List|}
+  }
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[(H)Cons] (H)コンス
+      \item[struct] 構造体
+    \end{description}
+
+    \item Consは「コンス」という用語でOK
+
+    \item Transcript:
+    そして、次のような2つの構造体である``HCons''と``HNil''があり、
+    これらはこの図のようになっている。
+    これは一見するとリスト（List）のように見えるが、実は単なるリストではない。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Heterogeneous List}
+
+  \begin{itemize}
+    \item<+-> \lstinline|HList| can have some values
+    and their type order
+  \end{itemize}
+
+  \begin{columns}
+    \begin{column}{0.3\textwidth}
+      \begin{uncoverenv}<+->
+\begin{lstlisting}[style=swift]
+let a = HCons(
+  1,
+  HCons(
+    true,
+    HCons(
+      "string",
+      HNil.hnil() 
+    )
+  )
+)
+\end{lstlisting}
+      \end{uncoverenv}
+    \end{column}
+    \begin{column}{0.7\textwidth}
+      \begin{uncoverenv}<+->
+\begin{lstlisting}[style=swift]
+a: HCons<Int, HCons<Bool, HCons<String, HNil>>>
+\end{lstlisting}
+      \end{uncoverenv}
+    \end{column}
+  \end{columns}
+
+  \begin{itemize}
+    \item<+-> \lstinline|List| cannot have more than 1 type, but \lstinline|HList| have any of the number of types
+  \end{itemize}
+
+  \uncover<+->{
+    \simplecallout{}{green!30}{Today, we'll consider the \lstinline|append| method of two \lstinline|HList|s}
+  }
+
+  \begin{notes}
+    \item 型はまあいいかな？（Nilがちょっと心配？）
+
+    \item ここでトークではHListのappendについて考えると導入する
+
+    \item Transcript:
+    HListはいくつかの値と、その値の型の順序を持つことができる。
+    たとえば、左の図のようにIntの1、Boolのtrue、そして文字列の"string"が並んだような
+    データ構造も表わすことができる。
+    これはSwiftの現在の処理系でコンパイルすることができ、
+    右図のような型がきちんとつく。
+    Listは1つ以上の型を持つことはできないが、
+    一方でHListは何種類でも型を持つことができる。
+    今日は、2つのHList（のインスタンス）が与えられたときに、
+    それらのappend（結合）を考えていきたい。
+  \end{notes}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\texttt{append} for \texttt{List}s}
+
+  \begin{itemize}
+    \item<+-> For now, in the case of the ordinary \lstinline|List|
+  \end{itemize}
+
+  \begin{uncoverenv}<+->
+\begin{lstlisting}[style=swift]
+func append<A>(_ a: List<A>, _ b: List<A>) -> List<A> {
+  switch a {
+  case let .Cons(h, t):
+    return .Cons(h, append(t, b))
+  case .Nil:
+    return b
+  }
+}  
+\end{lstlisting}     
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> But, \lstinline|HList| may have more than 1 type,
+    so it's not easy...\ce{😇}
+  \end{itemize}
+
+  \uncover<+->{
+    \simplecallout{-}{blue!20}{What should we use to implement it?}
+  }
+
+  \uncover<+->{
+    \simplecallout{}{green!30}{It's difficult for Java
+      but Swift has \lstinline|protocol| and \lstinline|extension|}
+  }
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[protocol] プロトコル
+      \item[extension] エクステンション
+    \end{description}
+    
+    \item appendのことをトーク中は``concat(concatination)''のように言うかも
+
+    \item Transcript:
+    まずは普通のListについて考える。
+    普通のListの結合（append）はこのように再帰的（recursive）に実装できる。
+    このListのappendは1つ型パラメータAを使っているが、
+    しかしHListはいくつも型がある。
+    こういうときどうやって実装したらよいだろうか？
+    Javaでは難しいが、Swiftには``protocol/extension''があるので、
+    これが達成できる。
+  \end{notes}
+\end{frame}
+
+\section{protocol/extension}
+
+\begin{frame}[fragile]
+  \frametitle{\texttt{protocol}/\texttt{extension}}
+
+  \pause
+  \begin{itemize}
+    \item<+-> Swift \lstinline|protocol| sometimes could be said
+    ``it's similler to \lstinline|interface| of Java''
+  \end{itemize}
+
+  \begin{uncoverenv}<+->
+    \begin{columns}
+      \begin{column}{0.55\textwidth}
+\begin{lstlisting}[style=java, caption={Java interface}]
+interface JsonWrite<A> {
+  public JSON toJson(A a);
+}
+class User(???) implements JsonWrite<User> {
+  public JSON toJson(User a) {
+    ???
+  }
+}
+\end{lstlisting}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+\begin{lstlisting}[style=swift, caption={Swift protocol}]
+protocol JsonWrite {
+  associatedtype A
+  func toJson(_ a: A) -> JSON
+}
+class User: JsonWrite {
+  typealias A = User
+  func toJson(_ a: A) -> JSON {
+    ???
+  }
+}
+\end{lstlisting}
+      \end{column}
+    \end{columns}
+  \end{uncoverenv}
+
+  \uncover<+->{
+    \simplecallout{}{green!30}{It's not at all...}
+  }
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[interface] インターフェース
+      \item[JSON] JSON（ジェイソン）
+      \item[Haskell] ハスケル
+    \end{description}
+
+    \item Transcript:
+    ここでSwiftが持つprotocol/extensionについて考える。
+    これは僕がSwiftを好きに思う理由の1つで、とてもおもしろい機能である。
+    HaskellやScalaにも、このような機能があるがJavaにはないと思う。
+    ただ、しばしば「SwiftのprotocolはJavaのinterfaceに似ている」と
+    言われることがある。たしかに次のようなJSONに変換できるような
+    protocolである``JsonWrite''を考えると、今``User''が
+    ``JsonWrite''を実装する（implement）、または適合する（confirm）ことを
+    JavaとSwiftでそれぞれ同じように書ける。
+    これだけだと確かに似ているが、ただそれだけではない。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\texttt{protocol}/\texttt{extension}}
+
+  \begin{itemize}
+    \item<+-> If we need to extend a fixed data type such a \lstinline|Integer|
+
+    \item<+-> However in Java, we cannot extend a fixed data type so
+    we can't help but to use the \emph{Adapter pattern}
+  \end{itemize}
+
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \begin{uncoverenv}<.->
+\begin{lstlisting}[style=java, caption={Adapter pattern in Java}]
+class RichInteger implements JsonWrite<Integer> {
+  public Integer n;
+  public RichInteger(Integer i) {
+    this.n = i
+  }
+  
+  public JSON toJson(Integer a) {
+    ???
+  }
+}
+\end{lstlisting}
+      \end{uncoverenv}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{uncoverenv}<+->
+\begin{lstlisting}[style=swift, caption={\texttt{extension} in Swift}]
+extension Int: JsonWrite {
+  typealias A = Int
+
+  func toJson(_ a: Int) -> JSON {
+    ???
+  }
+}    
+\end{lstlisting}
+      \end{uncoverenv}
+    \end{column}
+  \end{columns}
+
+  \begin{itemize}
+    \item<.-> But Swift has \lstinline|extension|,
+    which find the function by the given types
+  \end{itemize}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[Adapter pattern] アダプターパターン
+    \end{description}
+
+    \item Transcript:
+    もし、すでに固まってしまったIntegerのようなデータ構造をJSONに変換
+    したくなったとき、どうしたらよいだろうか。
+    このような固定されたデータ構造は、たとえばプログラミング言語のコアや
+    あるいは他人のライブラリーなどで定義された型であって、
+    我々の努力で今つくったJsonWriteを使ってもらうのは不可能である。
+    こういうとき、JavaではAdapter patternという手法で次のような
+    RichIntegerのような型を新たにつくって対処することがしばしばある。
+    これはこれで動作はするが、しかし我々の関心はIntegerから
+    RichIntegerへ移動してしまった。これによりプログラムの複雑さが不必要に
+    高まってしまう。一方でSwiftはextensionにより、この問題をスマートに解決できる。
+    すでにフィックスされた型に対して、アドホックに機能を付け加えることが容易にできる。
+    これはextensionが「型から機能を探してくる」という能力を持っているからである。
+  \end{notes}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{\texttt{protocol}/\texttt{extension}}
+  
+  \uncover<+->{
+    \simplecallout{}{red!30}{What is the meaning of finding functions by the types?}
+  }
+
+  \begin{itemize}
+    \item<+-> For example, let's think about \emph{overloading} like following
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+    \begin{columns}
+      \begin{column}{0.5\textwidth}
+\begin{lstlisting}[style=swift]
+1 + 1 // 2
+\end{lstlisting}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{lstlisting}[style=swift]
+"hot" + "dog" // "hotdog"
+\end{lstlisting}
+      \end{column}
+    \end{columns}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> Operator \lstinline|+| has two behaviors:
+    \begin{itemize}
+      \item \lstinline|(Int, Int) -> Int|
+      \item \lstinline|(String, String) -> String|
+    \end{itemize}
+
+    \item<+-> So Swift looks up a suitable function by
+    the arguments' types
+
+    \item<+-> \lstinline|extension| is simillar like overloading
+  \end{itemize}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[overload] オーバーロード
+      \item[operator] 演算子
+      \item[argument] 引数
+    \end{description}
+
+    \item Transcript:
+    「型から機能を探してくる」とはどういうことだろうか。
+    これの簡単な例として``overload''がある。
+    おなじ``+''という関数または演算子だが、
+    引数によって左の例では加算となり、右の例では文字列の連結（concatination）となる。
+    これは+に引数の型に応じて少なくとも2つの振る舞いがあり、
+    もし引数の型がIntとIntならば足し算としてIntを返し、
+    そしてもしStringとStringならば文字列の連結としてStringを返す。
+    つまり、Swiftが適切な機能を引数の型から探してきてくれる。
+    extensionはこれに似た振る舞いをする。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\texttt{protocol}/\texttt{extension}}
+
+  \begin{itemize}
+    \item<+-> We can write \lstinline|+| function using
+    \lstinline|protocol| and \lstinline|extension|
+  \end{itemize}
+  
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+protocol Plusable {
+  associatedtype A
+  func +(_ a: A, _ b: A) -> A
+}    
+\end{lstlisting}
+
+    \begin{columns}
+      \begin{column}{0.5\textwidth}
+\begin{lstlisting}[style=swift]
+extension Int: Plusable {
+  typealias A = Int
+  func +(_ a: A, _ b: A) -> A {
+    // `Int.plus` maybe not exist...
+    return Int.plus(a, b)
+  }
+}
+\end{lstlisting}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{lstlisting}[style=swift]
+extension String: Plusable {
+  typealias A = String
+  func +(_ a: A, _ b: A) -> A {
+    return a.stringByAppendingString(b)
+  }
+}
+\end{lstlisting}
+      \end{column}
+    \end{columns}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> Overloading can be done by \lstinline|protocol| and \lstinline|extension|
+  \end{itemize}
+
+  \begin{notes}
+    \item Transcript:
+    オーバーロードのようなことができると示すために、
+    この+をprotocol/extensionで書いてみる。
+    ``Plusable''というprotocolをつくり、それのextensionとして
+    IntとStringにそれぞれ+演算子を定義する。
+    このように、オーバーロードがすることはprotocol/extensionで
+    同じように行うことができる。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\texttt{protocol}/\texttt{extension}}
+
+  \begin{itemize}
+    \item<+-> \lstinline|extension| can use another
+    \lstinline|extension| defined by a \lstinline|protocol|
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+extension Array: JsonWrite where Element: JsonWrite {
+  typealias A = Array<Element>
+
+  func toJson(_ a: Array<Element>): JSON {
+    ???
+  }
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \uncover<+->{
+    \simplecallout{}{green!30}{%
+      Can we make the \lstinline|append| for \lstinline|HList|s
+      by \lstinline|extension|?}
+  }
+
+  \begin{notes}
+    \item Transcript:
+    さらにextensionは他のprotocolで定義されたextensionを
+    使うこともできる。
+    たとえばここでは``Array''にさきほどのJsonWriteを適合させている。
+    ただし``where''句をともなって、Arrayの型パラメータAが
+    JsonWriteに適合しているならば、Array<A>もJsonWriteに
+    適合するといったことが書ける。
+    このextensionを使えばHListのappendを作れるのでは？
+  \end{notes}
+\end{frame}
+
+\section{Implementation}
+
+\begin{frame}[fragile]
+  \frametitle{Implementation}
+
+  \begin{itemize}
+    \item<+-> This is a \lstinline|append| for two normal \lstinline|List|s
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+func append<A>(_ a: List<A>, _ b: List<A>) -> List<A> {
+  switch a {
+  case let .Cons(h, t):
+    return .Cons(h, append(t, b))
+  case .Nil:
+    return b
+  }
+}  
+\end{lstlisting}     
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> This \lstinline|append| has two cases depending on
+    the first argument
+    \begin{itemize}
+      \item If it is \lstinline|Cons(h, t)|,
+      then the \lstinline|append| calls itself
+      passing \lstinline|t| as the first argument recursively
+      
+      \item If it is \lstinline|Nil|,
+      then the function returns the second argument
+    \end{itemize}
+
+    \item<+-> This \lstinline|append| is using \emph{run time} dispatching,
+    but we want to dispatch in \emph{compile time}
+  \end{itemize}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[recursively] 再帰的に
+      \item[run time] ランタイム
+      \item[compile time] コンパイルタイム
+    \end{description}
+
+    \item Transcript:
+    もう一度、普通のリストのappendを見てみると、
+    これは最初の引数によって2つに場合分けしている。
+    もしそれがCons(h, t)ならば、appendを再帰的に呼び出し
+    一方でNilならば第二引数をそのまま返す。
+    つまりリストの長さによって挙動を変更しているが、
+    リストの長さはランタイムの情報である。
+    ただ、HListは型が要素の順番に並んでいるので、
+    型として長さを持っている。型はコンパイルタイムの情報なので、
+    コンパイルタイムに挙動を変更しなければならない。
+    ここでextensionを利用する。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Implementation}
+
+  \begin{itemize}
+    \item<+-> We are making a \lstinline|protocol| for the \lstinline|HList|s \lstinline|append| as follows
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+protocol HAppend {
+  associatedtype Left: HList
+  associatedtype Right: HList
+  associatedtype Result: HList
+   
+  static func append(_ l1: Left, _ l2: Right) -> Result
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> Then we'll think about its \lstinline|extension|
+  \end{itemize}
+
+  \begin{notes}
+    \item Transcript:
+    ということで、まずは``HAppend''というHListのappendのprotocolを定義する。
+    これはLeftとRightという2つのHListを取り、それを結合した結果の
+    ResultというHListを返す関数appendをあらわすprotocolである。
+    これのextensionがどうなるかを今後は考えていく。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Implementation}
+
+  \begin{itemize}
+    \item<+-> First we can create a pettern for that the
+    first argument is \lstinline|HNil|
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+class App1<A: HList> {
+  init() {}
+}
+
+extension App1: HAppend {
+  typealias Left = HNil
+  typealias Right = A
+  typealias Result = A
+   
+  static func append(_ l1: HNil, _ l2: A) -> A {
+    return l2
+  }
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> It just returns the second argument
+  \end{itemize}
+
+  \begin{notes}
+    \item Transcript:
+    ということで、まずは簡単そうなHNilのケースから考えよう。
+    HList版appendの最初の引数は、associatedtype Leftで
+    与えられるので、それがHNilであった場合を考える。
+    これは単に第二引数のHListをそのまま返せばいいが、
+    ただここで問題となるのは第二引数を表すHListの型が手元にない。
+    extensionが型パラメータを取れたらいいが、それはできないので、
+    適当な型App1を作って対処することにする。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Implementation}
+
+  \begin{itemize}
+    \item<+-> Next we have to make a \lstinline|HCons| pattern
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+extension App1: HAppend where A == HCons<?, ?> {
+  ??? // There is non-working......
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> How do we get the \lstinline|?| types?
+    so it doesn't work well...\ce{😇}
+
+    \item<+-> There are two problems
+    \begin{enumerate}
+      \item A structure (\lstinline|class|, \lstinline|struct| and \lstinline|protcol|)
+      can be conformed by the same \lstinline|protocol| \emph{at most one}
+
+      \item And how do we get the \lstinline|append| function
+      that can concat previous \lstinline|HList|s?
+    \end{enumerate}
+  \end{itemize}
+  
+  \begin{notes}
+    \item Transcript:
+    ところが次にHConsのパターンを考えるとむつかしくなる。
+    まず、App1はさきほどHNilのパターンでHAppendに適合させてしまった。
+    したがってもう一度HAppendに適合させることはSwiftが許してくれない。
+    また、HCons(h, t)のように分解したとして、
+    ではこのtを使ったappendをどこから持ってくればよいだろうか。
+    普通のListのappendでは型が同じだったのでよかったが、
+    一方でHListではそうはいかない。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Solution for the former}
+
+  \begin{itemize}
+    \item<+-> We make an adapter class \lstinline|App3| following below
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+    \begin{columns}
+      \begin{column}{0.43\textwidth}
+\begin{lstlisting}[style=swift]
+class App3<A: HList, B: HList, C> {
+  init() {}
+}
+\end{lstlisting}
+      \end{column}
+      \begin{column}{0.57\textwidth}
+\begin{lstlisting}[style=swift]
+extension App3: HAppend where A == HCons<C, B> {
+  ???
+}   
+\end{lstlisting}
+      \end{column}
+    \end{columns}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<.-> We can use \lstinline|App3| for \lstinline|HCons| case instead of \lstinline|App1|
+    
+    \item<+-> Then we have to decide the \lstinline|associatedtype|s
+    of \lstinline|HAppend|
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+extension App3: HAppend where A == HCons<C, B> {
+  typealias Left = A
+  typealias Right = ? // What should we put?
+  typealias Result = ? // What should we put?
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \uncover<+->{
+    \simplecallout{}{red!30}{What should we put into types:
+      \lstinline|Right| and \lstinline|Result|?}
+  }
+  
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[App] アップ（Applyの先頭3文字）
+    \end{description}
+
+    \item Transcript:
+    かなり強引だが、3つ型パラメータを取れるようにしてしまえば、
+    HAppendのassociatedtypeであるLeft、Right、Resultに
+    対応させることができる。かつApp3はまだHAppendが適合していないので、
+    HNilのケースであるApp1と衝突することがない。
+    これでとりあえず最初の問題を解決する。
+    ただ、そうしたときにHAppendが持つ型LeftとRightにどういった
+    型を入れればよいだろうか？
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Solution for the latter}
+
+  \begin{itemize}
+    \item<+-> We add a type parameter called \lstinline|EV|
+    to get the previous \lstinline|append|
+
+    \item<+-> For this, we add 2 type parameters then
+    the adapter class takes 5 parameters rather than 3
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+class App5<A: HList, B: HList, C: HList, D, EV: HAppend> {
+  init() {}
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \begin{itemize}
+    \item<+-> Finally we can substitute the types for \lstinline|associatedtype|s
+    declared by \lstinline|HAppend|
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+extension App5: HAppend where A == EV.Left, B == EV.Right, C == EV.Result {
+  typealias Left = HCons<D, A>
+  typealias Right = X.B
+  typealias Result = HCons<D, C>
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[EV] エビデンス（evidence、証拠）
+    \end{description}
+
+    \item Transcript:
+    ただ、それだけでは1つ前のappend、つまりは
+    「1つ小さいHList用のappendを探してくる」ことができない。
+    Swiftは型から機能を探してくることができるので、型に機能を割り当てればいい。
+    幸いなことにHListのappendは型から機能が唯一に決定できる。
+    現在まさに定義しようとしているHAppendのLeftがHCons<H, T>だとしたら、
+    1つ前のHAppendはLeftがTである。
+    このようなappendを探すために、HListであるA, B, Cを取り、EVという型は
+    HListであるAとHListであるBを受け取って結合し、そしてHList Cを返す機能を持つとする。
+    そうすれば任意の型Dについて、HCons<D, A>とBを受け取ってHCons<D, C>を返す
+    appendを作ることができる。こうしてListのappendようなランタイムの再帰を
+    HListの型レベルの再帰に持ち込むことができる。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Solution for the latter}
+
+\begin{lstlisting}[style=swift]
+extension App5: HAppend where A == EV.Left, B == EV.Right, C == EV.Result {
+  typealias Left = HCons<D, A>
+  typealias Right = X.B
+  typealias Result = HCons<D, C>
+}
+\end{lstlisting}
+
+  \begin{itemize}
+    \item It can be figured out by the picture
+  \end{itemize}
+
+  \pause
+  \[
+    \text{A} := \STwo{?_1, ?_2},\; \text{B} := \STwo{?_3, ?_4},\; \text{C} := \text{A} + \text{B} = \SFour{?_1, ?_2, ?_3, ?_4}
+  \]
+
+  \pause
+  \begin{align*}
+    \text{Left}\; &:= HCons(\mathbf{D}, A) = \SThree{\mathbf{D}, ?_1, ?_2} \\
+    \text{Right}\; &:= \text{B} = \STwo{?_3, ?_4} \\
+    \text{Result}\; &:= HCons(\mathbf{D}, \text{A}) + \text{B} = \SFive{\mathbf{D}, ?_1, ?_2, ?_3, ?_4} = HCons(D, C)
+  \end{align*}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Complete implementation}
+
+  \begin{itemize}
+    \item<+-> We get the perfect implementation for \lstinline|HList|s \lstinline|append| function
+  \end{itemize}
+
+  \begin{uncoverenv}<.->
+\begin{lstlisting}[style=swift]
+extension App1: HAppend {
+  typealias Left = HNil
+  typealias Right = A
+  typealias Result = A
+   
+  static func append(_ l1: HNil, _ l2: A) -> A {
+    return l2
+  }
+}
+extension App5: HAppend where EV.Left == A, B == EV.Right, C == EV.Result {
+  typealias Left = HCons<D, A>
+  typealias Right = B
+  typealias Result = HCons<D, C>
+   
+  static func append(_ l1: HCons<D, A>, _ l2: B) -> HCons<D, C> {
+    return HCons(l1.head, EV.append(l1.tail, l2))
+  }
+}
+\end{lstlisting}
+  \end{uncoverenv}
+
+  \begin{notes}
+    \item Transcript:
+    ようやくできあがった。
+    これが実用的かどうかは正直なところわからなくなりつつある。
+    なぜそう思うのかを説明するために、できあがったappendの
+    利用例を見ていこう。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Example}
+
+\begin{lstlisting}[style=swift]
+let a = HCons(1, HCons("string", HNil.hNil))
+let b = HCons(true, HCons(1.001, HNil.hNil))
+
+typealias AA = HCons<String, HNil>
+typealias A = HCons<Int, AA>
+typealias BB = HCons<Double, HNil>
+typealias B = HCons<Bool, BB>
+typealias CC = HCons<String, B>
+typealias C = HCons<Int, CC>
+typealias AppC = App1<B>
+typealias AppB = App5<HNil, B, B, String, AppC>
+typealias AppA = App5<AA, B, CC, Int, AppB>
+
+let appended = AppA.append(a, b)
+\end{lstlisting}
+
+  \uncover<.->{
+    \simplecallout{-}{green!30}{This is it! \ce{😇}}
+  }
+
+  \begin{notes}
+    \item Transcript:
+    このようにEVを手で与えなければならないため、
+    ちょっと実用で使えるものにはならない……。
+  \end{notes}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Example}
+
+  \begin{itemize}
+    \item<+-> We have to give Swift what the type \lstinline|EV| is
+    because Swift doesn't infer it
+  \end{itemize}
+
+  \begin{notes}
+    \item 用語
+    \begin{description}
+      \item[type inference] 型推論（この日本語を言う可能性が高い）
+    \end{description}
+    
+    \item Transcript:
+    いろいろな方法を試して、なんとかEVを自動で得ることはできないだろうか？
+    ということを考えていたものの、どれも上手くいかなかった。
+    たぶんEVは手動で入れるしかないだろう。
+  \end{notes}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}[fragile]
+  \frametitle{Conclusion}
+
+  \pause
+  \begin{itemize}
+    \item<+-> There are some interesting data types like \lstinline|HList|
+
+    \item<+-> \lstinline|append| method is able to make by
+    \lstinline|protocol| and \lstinline|extension|
+
+    \item<+-> Swift's type inference is wanted by people to
+    improve itself
+    \begin{itemize}
+      \item \lstinline|HList|s are very useful
+      but we'll not use their \lstinline|append| in the production
+    \end{itemize}
+  \end{itemize}
+
+  \begin{notes}
+    \item Transcript:
+    このトークではHListについて紹介し、そしてそれらの
+    appendを実装していった。
+    さて、もし僕のトークのアブストラクトを読んでいる人がいたら
+    「どこにカリーハワード対応がでてきた？」と思うかもしれない。
+    実はそういう方法をやってみたものの、
+    紹介したApp1やApp5を利用したテクニックでしか、
+    Swiftのprotocol/extensionにジェネリクスを持ち込むことができなかった。
+    今回、挫折した方法も今後さらに考えていきたいとは思う。
+    また、Swiftの型推論がよりよくなれば、もっとよいコードが書けるようになると思う。
+  \end{notes}
+\end{frame}
+
+\section*{References}
+
+\begin{frame}
+  \frametitle{References}
+
+  \bibliographystyle{junsrt_url}
+  \nocite{*}
+  \bibliography{ref}
+
+  \begin{notes}
+    \item Transcript:
+    今回のトークでもし型システムに興味を持たれた方は、
+    ピアースさんのこの本（上が原著、下は日本語訳）をおすすめしたい。
+    型システムの基礎から本格的なところまで詳細に記述してある。
+    形式的なところはどうしても「定義・定理・証明」みたいな流れで
+    ちょっと困惑するかもしれないが、実はそこまですごく
+    最初のハードルが高いわけではないと思う。
+    もし興味があるなら買ってみてほしい。
+  \end{notes}
+\end{frame}
+
+\begin{frame}
+  \centering
+  {\Huge Thank you for your attention!}
+
+  \begin{notes}
+    \item Transcript:
+    ご静聴ありがとうございました。
+  \end{notes}
+\end{frame}
+
+\end{document}
