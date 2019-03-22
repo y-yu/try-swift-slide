@@ -1,4 +1,4 @@
-Gererics of protocol/extension slide
+Gererics in protocol/extension slide
 ============================
 
 This is a presentation at [try! Swift Tokyo 2019](https://www.tryswift.co/events/2019/tokyo/en/#).
